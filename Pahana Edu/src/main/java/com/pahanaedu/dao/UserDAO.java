@@ -5,6 +5,27 @@ import com.pahanaedu.model.User;
 import com.pahanaedu.util.DatabaseConnection;
 
 public class UserDAO {
+	
+	// ✅ Check if username or email already exists
+    public boolean userExists(String username, String email) {
+        String sql = "SELECT COUNT(*) FROM users WHERE username = ? OR email = ?";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, username);
+            stmt.setString(2, email);
+            
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // true if count > 0
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return false;
+    }
     
     public boolean createUser(User user) {
         String sql = "INSERT INTO users (username, password, email, first_name, last_name, phone, address) VALUES (?, ?, ?, ?, ?, ?, ?)";

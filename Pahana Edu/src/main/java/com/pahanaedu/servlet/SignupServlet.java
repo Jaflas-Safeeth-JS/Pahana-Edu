@@ -30,6 +30,11 @@ public class SignupServlet extends HttpServlet {
         String password = request.getParameter("password");
         String phone = request.getParameter("phone");
         String address = request.getParameter("address");
+        
+        if (userDAO.userExists(username, email)) {
+            response.sendRedirect("signup.jsp?error=Username or Email already exists. Please try another.");
+            return; // Stop execution
+        }
        
         
         
