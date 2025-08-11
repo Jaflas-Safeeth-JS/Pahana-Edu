@@ -32,8 +32,19 @@ public class LoginServlet extends HttpServlet {
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
-            response.sendRedirect("admin-dashboard.jsp");
-            
+           
+         // Redirect based on role
+            String role = user.getRole();  // assuming User class has getRole() method
+
+            if ("admin".equalsIgnoreCase(role)) {
+                response.sendRedirect("adminDashboard.jsp");
+            } else if ("cashier".equalsIgnoreCase(role)) {
+                response.sendRedirect("cashierDashboard.jsp");
+            } else if ("customer".equalsIgnoreCase(role)) {
+                response.sendRedirect("customerDashboard.jsp");
+            } else {
+                response.sendRedirect("login.jsp?error=Unknown user role.");
+            }
            
         } else {
             response.sendRedirect("login.jsp?error=Invalid username or password");

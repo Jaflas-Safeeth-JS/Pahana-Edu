@@ -11,19 +11,20 @@ public class User {
     private String lastName;
     private String phone;
     private String address;
+    private String role; 
     
     
     // Constructors, getters, and setters
     public User() {}
     
     public User(String username, String password, String email, 
-                String firstName, String lastName) {
+                String firstName, String lastName, String role) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        
+        this.role = role;
     }
     
     // Add all getters and setters here...
@@ -90,5 +91,13 @@ public class User {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+    
+    public String getRole() {
+        return role;
+    }
+    
+    public void setRole(String role) {
+        this.role = role;
     }
 }

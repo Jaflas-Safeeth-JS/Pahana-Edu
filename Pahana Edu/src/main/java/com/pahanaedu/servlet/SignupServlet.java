@@ -38,7 +38,7 @@ public class SignupServlet extends HttpServlet {
        
         
         
-        User user = new User(username, password, email, firstName, lastName);
+        User user = new User(username, password, email, firstName, lastName, "customer");
         user.setPhone(phone);
         user.setAddress(address);
         
