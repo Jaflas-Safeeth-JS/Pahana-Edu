@@ -220,6 +220,13 @@
 
         <form id="signupForm" method="post" action="signup">
             <div class="form-row">
+            
+            <div class="form-group">
+                <label for="accountNumber">Account Number (from cashier/admin) <span style="color:red">*</span></label>
+                <input type="text" id="accountNumber" name="accountNumber" required 
+                       placeholder="Enter your Account No e.g. PEAC01">
+            </div>
+            
                 <div class="form-group">
                     <label for="firstName">First Name <span class="required">*</span></label>
                     <input type="text" id="firstName" name="firstName" required>

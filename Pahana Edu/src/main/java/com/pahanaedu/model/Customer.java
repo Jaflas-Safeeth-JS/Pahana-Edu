@@ -1,14 +1,15 @@
 package com.pahanaedu.model;
 
+
 public class Customer {
+
     private String accountNumber;
     private String name;
     private String address;
     private String phone;
     private int unitsConsumed;
 
-    public Customer() {}
-
+    // Full constructor
     public Customer(String accountNumber, String name, String address, String phone, int unitsConsumed) {
         this.accountNumber = accountNumber;
         this.name = name;
@@ -17,8 +18,10 @@ public class Customer {
         this.unitsConsumed = unitsConsumed;
     }
 
-    // Getters & Setters
+    // Empty constructor (optional, can be used by frameworks)
+    public Customer() { }
 
+    // Getters and Setters
     public String getAccountNumber() {
         return accountNumber;
     }

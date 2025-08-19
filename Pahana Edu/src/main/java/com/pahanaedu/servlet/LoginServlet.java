@@ -22,32 +22,38 @@ public class LoginServlet extends HttpServlet {
         request.getRequestDispatcher("login.jsp").forward(request, response);
     }
     
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        
-        User user = userDAO.authenticateUser(username, password);
-        
+
+        User user = userDAO.authenticate(username, password);
+
         if (user != null) {
             HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-           
-         // Redirect based on role
-            String role = user.getRole();  // assuming User class has getRole() method
+            session.setAttribute("username", user.getUsername());
+            session.setAttribute("role", user.getRole());
+            session.setAttribute("accountNumber", user.getAccountNumber());  // ✅ store acc no
+            session.setAttribute("fullName", user.getFirstName() + " " + user.getLastName());
 
-            if ("admin".equalsIgnoreCase(role)) {
-                response.sendRedirect("adminDashboard.jsp");
-            } else if ("cashier".equalsIgnoreCase(role)) {
-                response.sendRedirect("cashierDashboard.jsp");
-            } else if ("customer".equalsIgnoreCase(role)) {
-                response.sendRedirect("customerDashboard.jsp");
-            } else {
-                response.sendRedirect("login.jsp?error=Unknown user role.");
+            // Redirect based on role
+            switch (user.getRole()) {
+                case "admin":
+                    response.sendRedirect("adminDashboard.jsp");
+                    break;
+                case "cashier":
+                    response.sendRedirect("cashierDashboard.jsp");
+                    break;
+                case "customer":
+                    response.sendRedirect("customerDashboard.jsp");
+                    break;
+                default:
+                    response.sendRedirect("login.jsp?error=Unknown role");
             }
-           
         } else {
-            response.sendRedirect("login.jsp?error=Invalid username or password");
+            response.sendRedirect("login.jsp?error=Invalid Username or Password");
         }
     }
+
 }
