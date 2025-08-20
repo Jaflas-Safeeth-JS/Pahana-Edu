@@ -168,8 +168,206 @@ public class CustomerDAO {
         }
     }
 
-    
-    
+  /*  
+ // Get customer by account number
+    public Customer getCustomerByAccount(String accNo) {
+        Customer c = null;
+        try (Connection con = DatabaseConnection.getConnection()) {
+            String sql = "SELECT * FROM customers WHERE account_number = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, accNo);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                c = new Customer(
+                    rs.getString("account_number"),
+                    rs.getString("name"),
+                    rs.getString("address"),
+                    rs.getString("phone"),
+                    rs.getInt("units_consumed")
+                );
+            }
+        } catch(SQLException e){ e.printStackTrace(); }
+        return c;
+    }
+    */
 
+    // Update units consumed after purchase
+    public void updateUnits(String accNo, int newUnits) {
+        try (Connection con = DatabaseConnection.getConnection()) {
+            String sql = "UPDATE customers SET units_consumed = ? WHERE account_number = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, newUnits);
+            ps.setString(2, accNo);
+            ps.executeUpdate();
+        } catch(SQLException e){ e.printStackTrace(); }
+    }
+
+   /* // Search customers by name or account
+    public List<Customer> searchCustomers(String query) {
+        List<Customer> list = new ArrayList<>();
+        try (Connection con = DatabaseConnection.getConnection()) {
+            String sql = "SELECT * FROM customers WHERE name LIKE ? OR account_number LIKE ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, "%" + query + "%");
+            ps.setString(2, "%" + query + "%");
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                list.add(new Customer(
+                    rs.getString("account_number"),
+                    rs.getString("name"),
+                    rs.getString("address"),
+                    rs.getString("phone"),
+                    rs.getInt("units_consumed")
+                ));
+            }
+        } catch(SQLException e){ e.printStackTrace(); }
+        return list;
+    }
+*/
+    
+    public Customer getCustomerByName(String name){
+        Customer c = null;
+        try(Connection con = DatabaseConnection.getConnection()){
+            String sql = "SELECT * FROM customers WHERE name LIKE ? LIMIT 1";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, "%" + name + "%");
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                c = new Customer();
+                c.setAccountNumber(rs.getString("account_number"));
+                c.setName(rs.getString("name"));
+                c.setAddress(rs.getString("address"));
+                c.setPhone(rs.getString("phone"));
+                c.setUnitsConsumed(rs.getInt("units_consumed"));
+            }
+        } catch(Exception e){ e.printStackTrace(); }
+        return c;
+    }
+
+    
+   
+    
+ 
+
+    
+    public List<Customer> searchCustomersForBilling(String query) {
+        List<Customer> list = new ArrayList<>();
+        String sql = "SELECT * FROM customers WHERE account_number LIKE ? OR first_name LIKE ? OR last_name LIKE ? ORDER BY id ASC";
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, "%" + query + "%");
+            ps.setString(2, "%" + query + "%");
+            ps.setString(3, "%" + query + "%");
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Customer c = new Customer(
+                        rs.getString("account_number"),
+                        rs.getString("first_name") + " " + rs.getString("last_name"),
+                        rs.getString("address"),
+                        rs.getString("phone"),
+                        rs.getInt("units_consumed")
+                    );
+                    list.add(c);
+                }
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return list;
+    }
+
+
+
+
+    // Bill: Get customer by account number
+    public Customer getCustomerByAccountForBilling(String accountNumber) {
+        String sql = "SELECT * FROM customers WHERE account_number= ?";
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, accountNumber);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                return new Customer(
+                        rs.getString("account_number"),
+                        rs.getString("name"),
+                        rs.getString("address"),
+                        rs.getString("phone"),
+                        rs.getInt("units_consumed")
+                );
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    // Bill: Update customer units consumed
+    public boolean updateUnitsConsumed(String accountNumber, int units) throws SQLException {
+        String sql = "UPDATE customers SET units_consumed=? WHERE account_number=?";
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, units);
+            ps.setString(2, accountNumber);
+            return ps.executeUpdate() > 0;
+        }
+    }
+    
+ // Get customer by account number or name
+    public Customer getCustomerByNameOrAccount(String query) {
+        Customer customer = null;
+        String sql = "SELECT * FROM customers WHERE account_number=? OR name LIKE ?";
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, query);
+            ps.setString(2, "%" + query + "%");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                customer = new Customer(
+                    rs.getString("account_number"),
+                    rs.getString("name"),
+                    rs.getString("address"),
+                    rs.getString("phone"),
+                    rs.getInt("units_consumed")
+                );
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return customer;
+    }
+
+    // Get customer by ID
+    public Customer getCustomerById(int id) {
+        Customer customer = null;
+        String sql = "SELECT * FROM customers WHERE id=?";
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                customer = new Customer(
+                    rs.getString("account_number"),
+                    rs.getString("name"),
+                    rs.getString("address"),
+                    rs.getString("phone"),
+                    rs.getInt("units_consumed")
+                );
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return customer;
+    }
+
+	public void updateUnitsConsumed(int customerId, int totalUnits) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	 private Customer mapRow(ResultSet rs) throws SQLException {
+	        return new Customer(
+	                rs.getString("account_number"),
+	                rs.getString("name"),
+	                rs.getString("address"),
+	                rs.getString("phone"),
+	                rs.getInt("units_consumed")
+	        );
+	    }
 
 }
