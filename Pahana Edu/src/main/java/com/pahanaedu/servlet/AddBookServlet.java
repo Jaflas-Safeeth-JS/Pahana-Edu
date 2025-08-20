@@ -1,0 +1,41 @@
+package com.pahanaedu.servlet;
+
+import com.pahanaedu.dao.BookDAO;
+import com.pahanaedu.model.Book;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.WebServlet;
+import java.io.IOException;
+
+@WebServlet("/AddBookServlet")
+public class AddBookServlet extends HttpServlet {
+    private BookDAO bookDAO = new BookDAO();
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        String isbn = request.getParameter("isbn");
+        String title = request.getParameter("title");
+        String author = request.getParameter("author");
+        String publisher = request.getParameter("publisher");
+        double price = Double.parseDouble(request.getParameter("price"));
+        int stock = Integer.parseInt(request.getParameter("stock"));
+
+        // Check for duplicate ISBN
+        if (bookDAO.isDuplicateISBN(isbn)) {
+            // Redirect back to addBook.jsp with error message
+            response.sendRedirect("addBook.jsp?error=ISBN already exists!");
+            return;
+        }
+
+        Book book = new Book(0, isbn, title, author, publisher, price, stock);
+        boolean success = bookDAO.addBook(book);
+
+        if (success) {
+            response.sendRedirect("BookListServlet?success=Book added successfully");
+        } else {
+            response.sendRedirect("addBook.jsp?error=Failed to add book");
+        }
+    }
+}
