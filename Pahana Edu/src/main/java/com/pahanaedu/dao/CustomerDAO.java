@@ -168,28 +168,7 @@ public class CustomerDAO {
         }
     }
 
-  /*  
- // Get customer by account number
-    public Customer getCustomerByAccount(String accNo) {
-        Customer c = null;
-        try (Connection con = DatabaseConnection.getConnection()) {
-            String sql = "SELECT * FROM customers WHERE account_number = ?";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, accNo);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()) {
-                c = new Customer(
-                    rs.getString("account_number"),
-                    rs.getString("name"),
-                    rs.getString("address"),
-                    rs.getString("phone"),
-                    rs.getInt("units_consumed")
-                );
-            }
-        } catch(SQLException e){ e.printStackTrace(); }
-        return c;
-    }
-    */
+  
 
     // Update units consumed after purchase
     public void updateUnits(String accNo, int newUnits) {
@@ -202,28 +181,7 @@ public class CustomerDAO {
         } catch(SQLException e){ e.printStackTrace(); }
     }
 
-   /* // Search customers by name or account
-    public List<Customer> searchCustomers(String query) {
-        List<Customer> list = new ArrayList<>();
-        try (Connection con = DatabaseConnection.getConnection()) {
-            String sql = "SELECT * FROM customers WHERE name LIKE ? OR account_number LIKE ?";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, "%" + query + "%");
-            ps.setString(2, "%" + query + "%");
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()) {
-                list.add(new Customer(
-                    rs.getString("account_number"),
-                    rs.getString("name"),
-                    rs.getString("address"),
-                    rs.getString("phone"),
-                    rs.getInt("units_consumed")
-                ));
-            }
-        } catch(SQLException e){ e.printStackTrace(); }
-        return list;
-    }
-*/
+  
     
     public Customer getCustomerByName(String name){
         Customer c = null;
@@ -369,5 +327,18 @@ public class CustomerDAO {
 	                rs.getInt("units_consumed")
 	        );
 	    }
+	 
+	 //for Dashboard
+	 
+	 public int getTotalCustomers() {
+		    int count = 0;
+		    try (Connection con = DatabaseConnection.getConnection();
+		         PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM customers");
+		         ResultSet rs = ps.executeQuery()) {
+		        if (rs.next()) count = rs.getInt(1);
+		    } catch (Exception e) { e.printStackTrace(); }
+		    return count;
+		}
+
 
 }
