@@ -136,23 +136,7 @@ public class BookDAO {
         return books;
     }
     
-   /*
-    public boolean isDuplicateISBN(String isbn) {
-        String sql = "SELECT 1 FROM books WHERE isbn = ? LIMIT 1";
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, isbn);
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next(); // true if ISBN exists
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    
- */
+  
    
 
     
@@ -308,6 +292,18 @@ public class BookDAO {
                 rs.getDouble("price"),
                 rs.getInt("stock")
         );
+    }
+
+    // for dashboard
+    
+    public int getTotalBooks() {
+        int count = 0;
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM books");
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) count = rs.getInt(1);
+        } catch (Exception e) { e.printStackTrace(); }
+        return count;
     }
 
     
