@@ -40,13 +40,13 @@ public class LoginServlet extends HttpServlet {
             // Redirect based on role
             switch (user.getRole()) {
                 case "admin":
-                    response.sendRedirect("adminDashboard.jsp");
+                    response.sendRedirect("dashboard.jsp");
                     break;
                 case "cashier":
-                    response.sendRedirect("cashierDashboard.jsp");
+                    response.sendRedirect("dashboard.jsp");
                     break;
                 case "customer":
-                    response.sendRedirect("customerDashboard.jsp");
+                    response.sendRedirect("dashboard.jsp");
                     break;
                 default:
                     response.sendRedirect("login.jsp?error=Unknown role");

@@ -3,14 +3,14 @@ package com.pahanaedu.model;
 public class User {
     private int userId;
     private String username;
-    private String password;   // ⚠️ remember to hash before saving
+    private String password;   
     private String email;
     private String firstName;
     private String lastName;
     private String phone;
     private String address;
     private String role;
-    private String accountNumber;   // ✅ link to customer
+    private String accountNumber;   
 
     // --- Constructors ---
     public User() {}

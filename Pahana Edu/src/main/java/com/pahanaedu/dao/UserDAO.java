@@ -6,7 +6,7 @@ import com.pahanaedu.util.DatabaseConnection;
 
 public class UserDAO {
 	
-	// ✅ Check if username or email already exists
+	// Check if username or email already exists
     public boolean userExists(String username, String email) {
         String sql = "SELECT COUNT(*) FROM users WHERE username = ? OR email = ?";
         
@@ -28,7 +28,7 @@ public class UserDAO {
     }
     
     
- // ✅ Check if account number already has a login
+ //  Check if account number already has a login
     public boolean accountAlreadyHasUser(String accountNumber) {
         String sql = "SELECT COUNT(*) FROM users WHERE account_number = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -40,7 +40,7 @@ public class UserDAO {
         return false;
     }
 
-    // ✅ Create new customer login (linked with account number)
+    // Create new customer login (linked with account number)
     public boolean createUser(User user, String accountNumber) {
         String sql = "INSERT INTO users (username, password, email, first_name, last_name, phone, address, role, account_number) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?, 'customer', ?)";

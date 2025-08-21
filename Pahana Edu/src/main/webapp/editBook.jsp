@@ -1,13 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.pahanaedu.model.Customer" %>
+<%@ page import="com.pahanaedu.model.Book" %>
+<%
+    Book book = (Book) request.getAttribute("book");
+%>
 <jsp:include page="header.jsp" />
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Edit Customer</title>
-    <style>
-        body {
+<meta charset="UTF-8">
+<title>Edit Book</title>
+<style>
+    body {
             font-family: Arial, sans-serif;
             background-color: #f4f6f9;
             margin: 0;
@@ -78,44 +81,47 @@
         .back-link a:hover {
             text-decoration: underline;
         }
-    </style>
+</style>
 </head>
 <body>
-<%
-    Customer c = (Customer) request.getAttribute("customer");
-    if (c == null) {
-%>
-    <div class="container">
-        <h1>Customer not found</h1>
-        <div class="back-link"><a href="CustomerListServlet">Back to Customer List</a></div>
-    </div>
-<%
-    } else {
-%>
-    <div class="container">
-        <h1>Edit Customer - <%= c.getAccountNumber() %></h1>
-        <form method="post" action="EditCustomerServlet">
-            <input type="hidden" name="accountNumber" value="<%= c.getAccountNumber() %>">
+<div class="container">
+    <h1>Edit Book</h1>
+    <form action="EditBookServlet" method="post">
+        <input type="hidden" name="id" value="<%= book.getId() %>">
 
-            <label>Name:</label>
-            <input type="text" name="name" value="<%= c.getName() %>" required>
-
-            <label>Address:</label>
-            <input type="text" name="address" value="<%= c.getAddress() %>" required>
-
-            <label>Phone:</label>
-            <input type="text" name="phone" value="<%= c.getPhone() %>" required>
-
-            <label>Units Consumed:</label>
-            <input type="number" name="unitsConsumed" value="<%= c.getUnitsConsumed() %>" min="0" required>
-
-            <button type="submit">Update Customer</button>
-        </form>
-
-        <div class="back-link">
-            <a href="CustomerListServlet">← Back to Customer List</a>
+        <div class="form-group">
+            <label>ISBN:</label>
+            <input type="text" name="isbn" value="<%= book.getIsbn() %>" required>
         </div>
-    </div>
-<% } %>
+
+        <div class="form-group">
+            <label>Title:</label>
+            <input type="text" name="title" value="<%= book.getTitle() %>" required>
+        </div>
+
+        <div class="form-group">
+            <label>Author:</label>
+            <input type="text" name="author" value="<%= book.getAuthor() %>" required>
+        </div>
+
+        <div class="form-group">
+            <label>Publisher:</label>
+            <input type="text" name="publisher" value="<%= book.getPublisher() %>">
+        </div>
+
+        <div class="form-group">
+            <label>Price:</label>
+            <input type="number" step="0.01" name="price" value="<%= book.getPrice() %>" required>
+        </div>
+
+        <div class="form-group">
+            <label>Stock:</label>
+            <input type="number" name="stock" value="<%= book.getStock() %>" required min="0">
+        </div>
+
+        <button type="submit" class="btn">Update Book</button>
+    </form>
+    <a href="items.jsp" class="back-link">← Back to Manage Books</a>
+</div>
 </body>
 </html>
