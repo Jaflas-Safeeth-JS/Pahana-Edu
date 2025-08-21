@@ -1,145 +1,34 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <jsp:include page="header.jsp" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Add New Customer</title>
 <style>
-        /* Use the exact same styles as signup.jsp for consistency */
-        /* Paste your signup.jsp CSS styles here or link externally */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
+       
+          body { font-family: Arial, sans-serif; background: #f4f6f9; }
         .container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            width: 100%;
-            max-width: 600px;
-            text-align: center;
-            max-height: 90vh;
-            overflow-y: auto;
+            width: 90%; max-width: 500px; margin: 40px auto; background: #fff;
+            padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-
-        .container:hover {
-            transform: translateY(-5px);
-            transition: transform 0.3s ease;
+        h1 { text-align: center; margin-bottom: 20px; }
+        form label { display: block; margin-top: 10px; font-weight: bold; }
+        form input {
+            width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc;
+            border-radius: 6px; box-sizing: border-box;
         }
-
-        h1 {
-            color: #333;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        p.subtitle {
-            color: #666;
-            font-size: 1rem;
-            margin-bottom: 30px;
-        }
-
-        form {
-            text-align: left;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        input[type="text"], input[type="tel"], input[type="number"] {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e1e8ed;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            background: rgba(255, 255, 255, 0.8);
-            transition: all 0.3s ease;
-        }
-
-        input[type="text"]:focus, input[type="tel"]:focus, input[type="number"]:focus {
-            outline: none;
-            border-color: #667eea;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-        }
-
-        .error-message, .success-message {
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            padding: 10px;
-            border-radius: 8px;
-            display: none;
-            text-align: left;
-        }
-
-        .error-message {
-            background: rgba(220, 53, 69, 0.1);
-            border: 1px solid rgba(220, 53, 69, 0.2);
-            color: #dc3545;
-        }
-
-        .success-message {
-            background: rgba(40, 167, 69, 0.1);
-            border: 1px solid rgba(40, 167, 69, 0.2);
-            color: #28a745;
-        }
+        .btn { margin-top: 15px; width: 100%; padding: 10px; background: #28a745; border: none;
+            color: white; font-size: 16px; border-radius: 6px; cursor: pointer; }
+        .btn:hover { opacity: 0.9; }
+        .back-link { display: block; text-align: center; margin-top: 15px; }
 
         .required {
             color: #dc3545;
         }
 
-        @media (max-width: 600px) {
-            .container {
-                padding: 30px 20px;
-                margin: 10px;
-            }
-        }
+        
     </style>
 </head>
 <body>
@@ -191,7 +80,7 @@
             <input type="number" id="unitsConsumed" name="unitsConsumed" min="0" required>
         </div>
 
-        <button type="submit" class="submit-btn">Add Customer</button>
+        <button type="submit" class="btn">Add Customer</button>
     </form>
 </div>
 
@@ -202,47 +91,29 @@ document.getElementById('addCustomerForm').addEventListener('submit', function(e
     const errors = [];
     const form = e.target;
 
-    if (!form.name.value.trim()) errors.push('Customer name is required.');
-    if (!form.address.value.trim()) errors.push('Address is required.');
-    if (!form.phone.value.trim()) errors.push('Telephone number is required.');
-    if (!form.unitsConsumed.value || form.unitsConsumed.value < 0) errors.push('Units Consumed must be zero or more.');
+    const nameValue = form.name.value.trim();
+    const addressValue = form.address.value.trim();
+    const phoneValue = form.phone.value.trim();
+    const unitsValue = form.unitsConsumed.value;
+
+    // Validate customer name: not empty, at least 3 characters, no numbers
+    if (!nameValue) {
+        errors.push('Customer name is required.');
+    } else if (nameValue.length < 3) {
+        errors.push('Customer name must be at least 3 characters long.');
+    } else if (/\d/.test(nameValue)) {
+        errors.push('Customer name cannot contain numbers.');
+    }
+
+    if (!addressValue) errors.push('Address is required.');
+    if (!phoneValue) errors.push('Telephone number is required.');
+    if (!unitsValue || unitsValue < 0) errors.push('Units Consumed must be zero or more.');
 
     if (errors.length > 0) {
-        alert("Please fix the following errors:\n" + errors.join("\n")); // simple alert
+        alert("Please fix the following errors:\n" + errors.join("\n"));
         e.preventDefault();
     }
 });
-   /*const errorDiv = document.getElementById('errorMessage');
-    const successDiv = document.getElementById('successMessage');
-
-    // If redirected with success message, show it and clear user-entered fields (the account number already shows NEXT value from server)
-    if (successDiv.textContent.trim() !== "") {
-        successDiv.style.display = 'block';
-        document.getElementById('name').value = "";
-        document.getElementById('address').value = "";
-        document.getElementById('phone').value = "";
-        document.getElementById('unitsConsumed').value = "";
-    }
-
-    // Client-side validation
-    document.getElementById('addCustomerForm').addEventListener('submit', function(e) {
-        errorDiv.style.display = 'none';
-        errorDiv.innerHTML = '';
-        const errors = [];
-        const form = e.target;
-
-        if (!form.name.value.trim()) errors.push('Customer name is required.');
-        if (!form.address.value.trim()) errors.push('Address is required.');
-        if (!form.phone.value.trim()) errors.push('Telephone number is required.');
-        if (!form.unitsConsumed.value || form.unitsConsumed.value < 0) errors.push('Units Consumed must be zero or more.');
-
-        if (errors.length > 0) {
-            errorDiv.innerHTML = '<strong>Please fix the following errors:</strong><br>' + errors.map(e => '• ' + e).join('<br>');
-            errorDiv.style.display = 'block';
-            e.preventDefault();
-        }
-    });
-    */
 </script>
 
 
