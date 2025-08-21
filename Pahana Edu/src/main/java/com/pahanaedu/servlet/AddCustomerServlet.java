@@ -36,11 +36,12 @@ public class AddCustomerServlet extends HttpServlet {
 
 	        Customer customer = new Customer(accountNumber, name, address, phone, unitsConsumed);
 	        
-	        if (customerDAO.addCustomer(customer)) {
-	            // Redirect to GET method to show fresh form with new account number
-	            response.sendRedirect("addCustomer?success=Customer added successfully – " + accountNumber);
+	        boolean success = customerDAO.addCustomer(customer);
+
+	        if (success) {
+	            response.sendRedirect("CustomerListServlet?success=Customer added successfully");
 	        } else {
-	            response.sendRedirect("addCustomer?error=Failed to add customer");
+	            response.sendRedirect("addCustomer.jsp?error=Failed to add Customer");
 	        }
 	    }
 
