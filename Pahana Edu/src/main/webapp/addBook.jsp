@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<jsp:include page="header.jsp" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,6 +22,49 @@
         .btn:hover { opacity: 0.9; }
         .back-link { display: block; text-align: center; margin-top: 15px; }
     </style>
+    
+    <script>
+    function validateForm() {
+        let isbn = document.forms["bookForm"]["isbn"].value.trim();
+        let title = document.forms["bookForm"]["title"].value.trim();
+        let author = document.forms["bookForm"]["author"].value.trim();
+        let price = document.forms["bookForm"]["price"].value;
+        let stock = document.forms["bookForm"]["stock"].value;
+
+        // ISBN validation (alphanumeric, at least 5 chars)
+        let isbnPattern = /^[a-zA-Z0-9-]{5,}$/;
+        if (!isbnPattern.test(isbn)) {
+            alert("ISBN must be at least 5 characters long and alphanumeric.");
+            return false;
+        }
+
+        // Title & Author validation (not empty, not only numbers)
+        let textPattern = /[a-zA-Z]/;
+        if (!textPattern.test(title)) {
+            alert("Title must contain letters.");
+            return false;
+        }
+        if (!textPattern.test(author)) {
+            alert("Author must contain letters.");
+            return false;
+        }
+
+        // Price validation
+        if (price <= 0) {
+            alert("Price must be greater than 0.");
+            return false;
+        }
+
+        // Stock validation
+        if (stock < 0) {
+            alert("Stock cannot be negative.");
+            return false;
+        }
+
+        return true; // form valid
+    }
+</script>
+    
 </head>
 <body>
 <div class="container">
